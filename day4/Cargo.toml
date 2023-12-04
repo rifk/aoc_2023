@@ -1,0 +1,11 @@
+[package]
+name = "day4"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+clap.workspace = true
+eyre.workspace = true
+utils.workspace = true
+
+
