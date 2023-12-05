@@ -1,7 +1,6 @@
 use clap::Parser;
 use core::ops::Range;
 use eyre::{eyre, Result};
-use std::collections::HashSet;
 
 fn main() -> Result<()> {
     let args = utils::Args::parse();
@@ -9,7 +8,7 @@ fn main() -> Result<()> {
 
     let (seeds, maps) = input.split_once('\n').ok_or(eyre!("missing new line"))?;
 
-    let seeds = seeds
+    let seeds_one = seeds
         .strip_prefix("seeds: ")
         .ok_or(eyre!("missing prefix"))?
         .split(' ')
@@ -19,10 +18,20 @@ fn main() -> Result<()> {
     let maps = Maps::parse_input(maps.trim())?;
 
     if args.run_one() {
-        println!("part one:\n{}", solve_one(&seeds, &maps)?);
+        println!("part one:\n{}", solve_one(&seeds_one, &maps)?);
     }
+
+    let seeds_two = seeds
+        .strip_prefix("seeds: ")
+        .ok_or(eyre!("missing prefix"))?
+        .split(' ')
+        .map(|v| Ok(v.parse::<i64>()?))
+        .collect::<Result<Vec<i64>>>()?
+        .chunks(2)
+        .map(|c| c[0]..c[0] + c[1])
+        .collect::<Vec<Range<i64>>>();
     if args.run_two() {
-        println!("part one:\n{}", solve_two(&input)?);
+        println!("part one:\n{}", solve_two(&seeds_two, &maps)?);
     }
 
     Ok(())
@@ -106,13 +115,13 @@ fn solve_one(seeds: &[Seed], maps: &Maps) -> Result<String> {
     Ok(seeds
         .iter()
         .map(|s| {
-            s.map(&maps) // soil
-                .map(&maps) // fert
-                .map(&maps) // water
-                .map(&maps) // light
-                .map(&maps) // temp
-                .map(&maps) // humd
-                .map(&maps) // loc
+            s.map(maps) // soil
+                .map(maps) // fert
+                .map(maps) // water
+                .map(maps) // light
+                .map(maps) // temp
+                .map(maps) // humd
+                .map(maps) // loc
                 .0
         })
         .min()
@@ -120,6 +129,62 @@ fn solve_one(seeds: &[Seed], maps: &Maps) -> Result<String> {
         .to_string())
 }
 
-fn solve_two(input: &str) -> Result<String> {
-    todo!()
+// Part two - part one solution doesnt generalise nicely to part two, so not reusing
+fn solve_two(seeds: &[Range<i64>], maps: &Maps) -> Result<String> {
+    let soil = map_ranges(seeds, &maps.seed_soil);
+    let fert = map_ranges(&soil, &maps.soil_fert);
+    let water = map_ranges(&fert, &maps.fert_watr);
+    let light = map_ranges(&water, &maps.watr_lght);
+    let temp = map_ranges(&light, &maps.lght_temp);
+    let humd = map_ranges(&temp, &maps.temp_humd);
+    let loc = map_ranges(&humd, &maps.humd_loct);
+    Ok(loc
+        .iter()
+        .map(|l| l.start)
+        .min()
+        .ok_or(eyre!("missing min"))?
+        .to_string())
+}
+
+fn map_ranges(from: &[Range<i64>], map: &[(Range<i64>, i64)]) -> Vec<Range<i64>> {
+    let mut orig = from.to_vec();
+    let mut mapped = vec![];
+
+    map.iter().for_each(|(r, d)| {
+        let (new_orig, mut add_mapped) = orig
+            .iter()
+            .map(|o| {
+                if o.end <= r.start || r.end <= o.start {
+                    // no overlap
+                    (vec![o.clone()], None)
+                } else if o.start >= r.start && o.end <= r.end {
+                    // o fully in r
+                    (vec![], Some(o.start + d..o.end + d))
+                } else if r.start >= o.start && r.end <= o.end {
+                    // r fully in o
+                    (
+                        vec![o.start..r.start, r.end..o.end],
+                        Some(r.start + d..o.start + d),
+                    )
+                } else if o.start < r.start {
+                    // o before r with overlap
+                    (vec![o.start..r.start], Some(r.start + d..o.end + d))
+                } else {
+                    // o after r with overlap
+                    (vec![r.end..o.end], Some(o.start + d..r.end + d))
+                }
+            })
+            .fold((vec![], vec![]), |mut out, (mut o, m)| {
+                out.0.append(&mut o);
+                if let Some(m) = m {
+                    out.1.push(m);
+                }
+                out
+            });
+        orig = new_orig;
+        mapped.append(&mut add_mapped);
+    });
+
+    mapped.append(&mut orig);
+    mapped
 }
