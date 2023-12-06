@@ -6,4 +6,8 @@ edition.workspace = true
 [dependencies]
 eyre.workspace = true
 num-integer = "0.1.45"
-utils.workspace = true
+utils = { workspace = true, optional = true }
+
+[features]
+default = ["utils"]
+utils = ["dep:utils"]

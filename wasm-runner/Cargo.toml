@@ -1,0 +1,26 @@
+[package]
+name = "wasm-runner"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+day1 = { path = "../day1", default-features = false }
+day2 = { path = "../day2", default-features = false }
+day3 = { path = "../day3", default-features = false }
+day4 = { path = "../day4", default-features = false }
+day5 = { path = "../day5", default-features = false }
+day6 = { path = "../day6", default-features = false }
+day7 = { path = "../day7", default-features = false }
+day8 = { path = "../day8", default-features = false }
+day9 = { path = "../day9", default-features = false }
+day10 = { path = "../day10", default-features = false }
+day11 = { path = "../day11", default-features = false }
+day12 = { path = "../day12", default-features = false }
+day13 = { path = "../day13", default-features = false }
+day14 = { path = "../day14", default-features = false }
+eyre.workspace = true
+yew = { version = "0.21.0", features = ["csr"] }
+web-sys = "0.3.66"
+yew-agent = "0.3.0"
+paste = "1.0.14"
+wasm-bindgen = "0.2.89"

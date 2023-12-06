@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "wasm-runner",
     "utils",
     "utils-derive",
     "day1",
