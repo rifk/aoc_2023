@@ -11,7 +11,7 @@ fn main() -> Result<()> {
         println!("part one:\n{}", solve_one(&input)?);
     }
     if args.run_two() {
-        println!("part one:\n{}", solve_two(&input)?);
+        println!("part two:\n{}", solve_two(&input)?);
     }
 
     Ok(())
@@ -84,6 +84,7 @@ fn solve_two(input: &str) -> Result<String> {
         .to_string())
 }
 
+#[allow(clippy::type_complexity)]
 fn get_val_ranges(input: &str) -> Result<Vec<Vec<(i64, Range<usize>)>>> {
     input
         .lines()

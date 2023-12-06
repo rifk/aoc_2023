@@ -12,7 +12,7 @@ fn main() -> Result<()> {
         println!("part one:\n{}", solve_one(&cards)?);
     }
     if args.run_two() {
-        println!("part one:\n{}", solve_two(&cards)?);
+        println!("part two:\n{}", solve_two(&cards)?);
     }
 
     Ok(())

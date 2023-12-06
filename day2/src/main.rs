@@ -11,7 +11,7 @@ fn main() -> Result<()> {
         println!("part one:\n{}", solve_one(&games)?);
     }
     if args.run_two() {
-        println!("part one:\n{}", solve_two(&games)?);
+        println!("part two:\n{}", solve_two(&games)?);
     }
 
     Ok(())

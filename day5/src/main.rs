@@ -31,7 +31,7 @@ fn main() -> Result<()> {
         .map(|c| c[0]..c[0] + c[1])
         .collect::<Vec<Range<i64>>>();
     if args.run_two() {
-        println!("part one:\n{}", solve_two(&seeds_two, &maps)?);
+        println!("part two:\n{}", solve_two(&seeds_two, &maps)?);
     }
 
     Ok(())
@@ -168,9 +168,11 @@ fn map_ranges(from: &[Range<i64>], map: &[(Range<i64>, i64)]) -> Vec<Range<i64>>
                     )
                 } else if o.start < r.start {
                     // o before r with overlap
+                    #[allow(clippy::single_range_in_vec_init)]
                     (vec![o.start..r.start], Some(r.start + d..o.end + d))
                 } else {
                     // o after r with overlap
+                    #[allow(clippy::single_range_in_vec_init)]
                     (vec![r.end..o.end], Some(o.start + d..r.end + d))
                 }
             })

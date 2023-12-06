@@ -68,7 +68,7 @@ fn solve_two(time_dist: &[(i64, i64)]) -> Result<String> {
             d /= 10;
         }
         out.1 += part.1;
-        dbg!(out)
+        out
     });
     solve_one(&[(t, d)])
 }

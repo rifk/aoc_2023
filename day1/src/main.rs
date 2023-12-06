@@ -9,7 +9,7 @@ fn main() -> Result<()> {
         println!("part one:\n{}", solve_one(&input)?);
     }
     if args.run_two() {
-        println!("part one:\n{}", solve_two(&input)?);
+        println!("part two:\n{}", solve_two(&input)?);
     }
 
     Ok(())
