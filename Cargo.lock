@@ -248,6 +248,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "day7"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "eyre",
+ "utils",
+]
+
+[[package]]
 name = "encoding_rs"
 version = "0.8.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
