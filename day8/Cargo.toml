@@ -1,0 +1,12 @@
+[package]
+name = "day8"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+clap.workspace = true
+eyre.workspace = true
+num-integer = "0.1.45"
+utils.workspace = true
+
+
