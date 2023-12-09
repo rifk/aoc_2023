@@ -1,19 +1,5 @@
-use clap::Parser;
 use eyre::{eyre, Result};
-
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(9)?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&input)?);
-    }
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&input)?);
-    }
-
-    Ok(())
-}
+use utils::derive::aoc;
 
 fn parse_input(input: &str) -> Result<Vec<Vec<i64>>> {
     input
@@ -26,6 +12,7 @@ fn parse_input(input: &str) -> Result<Vec<Vec<i64>>> {
         .collect()
 }
 
+#[aoc(day9, part1)]
 fn solve_one(input: &str) -> Result<String> {
     let history = parse_input(input)?;
     Ok(history
@@ -48,6 +35,7 @@ fn solve_one(input: &str) -> Result<String> {
         .to_string())
 }
 
+#[aoc(day9, part2)]
 fn solve_two(input: &str) -> Result<String> {
     let history = parse_input(input)?;
     Ok(history

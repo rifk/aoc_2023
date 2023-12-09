@@ -197,7 +197,6 @@ checksum = "06ea2b9bc92be3c2baa9334a323ebca2d6f074ff852cd1d7b11064035cd3868f"
 name = "day1"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
  "utils",
 ]
@@ -206,7 +205,6 @@ dependencies = [
 name = "day2"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
  "utils",
 ]
@@ -215,7 +213,6 @@ dependencies = [
 name = "day3"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
  "utils",
 ]
@@ -224,7 +221,6 @@ dependencies = [
 name = "day4"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
  "utils",
 ]
@@ -233,7 +229,6 @@ dependencies = [
 name = "day5"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
  "utils",
 ]
@@ -242,7 +237,6 @@ dependencies = [
 name = "day6"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
  "utils",
 ]
@@ -251,7 +245,6 @@ dependencies = [
 name = "day7"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
  "utils",
 ]
@@ -260,7 +253,6 @@ dependencies = [
 name = "day8"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
  "num-integer",
  "utils",
@@ -270,9 +262,7 @@ dependencies = [
 name = "day9"
 version = "0.1.0"
 dependencies = [
- "clap",
  "eyre",
- "num-integer",
  "utils",
 ]
 
@@ -1118,6 +1108,16 @@ dependencies = [
  "clap",
  "eyre",
  "reqwest",
+ "utils-derive",
+]
+
+[[package]]
+name = "utils-derive"
+version = "0.1.0"
+dependencies = [
+ "eyre",
+ "quote",
+ "syn",
 ]
 
 [[package]]

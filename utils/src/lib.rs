@@ -1,13 +1,16 @@
-use clap::Parser;
 use eyre::{bail, eyre, Result};
 use reqwest::blocking::Client;
 use reqwest::header::COOKIE;
 use std::env;
 use std::fs;
 
+pub use crate::UtilArgs as Args;
+pub use clap::Parser;
+pub extern crate utils_derive as derive;
+
 #[derive(Debug, Parser)]
 #[command(long_about = None)]
-pub struct Args {
+pub struct UtilArgs {
     /// input file, AOC_SESSION env must be set if not specified
     #[arg(short, long)]
     input: Option<String>,
@@ -18,7 +21,7 @@ pub struct Args {
     #[arg(short, long)]
     two: bool,
 }
-impl Args {
+impl UtilArgs {
     pub fn get_input(&self, day: i32) -> Result<String> {
         if let Some(file) = &self.input {
             Ok(fs::read_to_string(file)?)

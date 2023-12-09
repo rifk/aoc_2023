@@ -1,41 +1,6 @@
-use clap::Parser;
 use core::ops::Range;
 use eyre::{eyre, Result};
-
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(5)?;
-
-    let (seeds, maps) = input.split_once('\n').ok_or(eyre!("missing new line"))?;
-
-    let seeds_one = seeds
-        .strip_prefix("seeds: ")
-        .ok_or(eyre!("missing prefix"))?
-        .split(' ')
-        .map(|v| Ok(Seed(v.parse::<i64>()?)))
-        .collect::<Result<Vec<Seed>>>()?;
-
-    let maps = Maps::parse_input(maps.trim())?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&seeds_one, &maps)?);
-    }
-
-    let seeds_two = seeds
-        .strip_prefix("seeds: ")
-        .ok_or(eyre!("missing prefix"))?
-        .split(' ')
-        .map(|v| Ok(v.parse::<i64>()?))
-        .collect::<Result<Vec<i64>>>()?
-        .chunks(2)
-        .map(|c| c[0]..c[0] + c[1])
-        .collect::<Vec<Range<i64>>>();
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&seeds_two, &maps)?);
-    }
-
-    Ok(())
-}
+use utils::derive::aoc;
 
 macro_rules! map {
     ($from:ty, $to:ty, $map:ident) => {
@@ -111,7 +76,17 @@ impl Maps {
     }
 }
 
-fn solve_one(seeds: &[Seed], maps: &Maps) -> Result<String> {
+#[aoc(day5, part1)]
+fn solve_one(input: &str) -> Result<String> {
+    let (seeds, maps) = input.split_once('\n').ok_or(eyre!("missing new line"))?;
+    let seeds = &seeds
+        .strip_prefix("seeds: ")
+        .ok_or(eyre!("missing prefix"))?
+        .split(' ')
+        .map(|v| Ok(Seed(v.parse::<i64>()?)))
+        .collect::<Result<Vec<Seed>>>()?;
+    let maps = &Maps::parse_input(maps.trim())?;
+
     Ok(seeds
         .iter()
         .map(|s| {
@@ -130,7 +105,20 @@ fn solve_one(seeds: &[Seed], maps: &Maps) -> Result<String> {
 }
 
 // Part two - part one solution doesnt generalise nicely to part two, so not reusing
-fn solve_two(seeds: &[Range<i64>], maps: &Maps) -> Result<String> {
+#[aoc(day5, part2)]
+fn solve_two(input: &str) -> Result<String> {
+    let (seeds, maps) = input.split_once('\n').ok_or(eyre!("missing new line"))?;
+    let seeds = &seeds
+        .strip_prefix("seeds: ")
+        .ok_or(eyre!("missing prefix"))?
+        .split(' ')
+        .map(|v| Ok(v.parse::<i64>()?))
+        .collect::<Result<Vec<i64>>>()?
+        .chunks(2)
+        .map(|c| c[0]..c[0] + c[1])
+        .collect::<Vec<Range<i64>>>();
+    let maps = &Maps::parse_input(maps.trim())?;
+
     let soil = map_ranges(seeds, &maps.seed_soil);
     let fert = map_ranges(&soil, &maps.soil_fert);
     let water = map_ranges(&fert, &maps.fert_watr);

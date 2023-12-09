@@ -1,21 +1,8 @@
-use clap::Parser;
 use eyre::Result;
+use utils::derive::aoc;
 
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(1)?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&input)?);
-    }
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&input)?);
-    }
-
-    Ok(())
-}
-
-fn solve_one(input: &str) -> Result<String> {
+#[aoc(day1, part1)]
+pub fn solve_one(input: &str) -> Result<String> {
     Ok(input
         .lines()
         .map(line_to_num)
@@ -35,7 +22,8 @@ fn line_to_num(l: &str) -> Result<i64> {
     Ok(l.parse::<i64>()?)
 }
 
-fn solve_two(input: &str) -> Result<String> {
+#[aoc(day8, part2)]
+pub fn solve_two(input: &str) -> Result<String> {
     solve_one(&replace(input))
 }
 

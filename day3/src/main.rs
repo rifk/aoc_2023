@@ -1,22 +1,9 @@
-use clap::Parser;
 use eyre::Result;
 use std::collections::HashSet;
 use std::ops::Range;
+use utils::derive::aoc;
 
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(3)?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&input)?);
-    }
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&input)?);
-    }
-
-    Ok(())
-}
-
+#[aoc(day3, part1)]
 fn solve_one(input: &str) -> Result<String> {
     let val_ranges = get_val_ranges(input)?;
 
@@ -50,6 +37,7 @@ fn solve_one(input: &str) -> Result<String> {
         .to_string())
 }
 
+#[aoc(day3, part2)]
 fn solve_two(input: &str) -> Result<String> {
     let val_ranges = get_val_ranges(input)?;
 

@@ -1,21 +1,5 @@
-use clap::Parser;
 use eyre::{eyre, Result};
-
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(6)?;
-
-    let time_dist = parse_input(&input)?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&time_dist)?);
-    }
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&time_dist)?);
-    }
-
-    Ok(())
-}
+use utils::derive::aoc;
 
 fn parse_input(input: &str) -> Result<Vec<(i64, i64)>> {
     let (t, d) = input.split_once('\n').ok_or(eyre!("missing new line"))?;
@@ -38,7 +22,12 @@ fn parse_input(input: &str) -> Result<Vec<(i64, i64)>> {
     Ok(t.into_iter().zip(d).collect::<Vec<(i64, i64)>>())
 }
 
-fn solve_one(time_dist: &[(i64, i64)]) -> Result<String> {
+#[aoc(day6, part1)]
+fn solve_one(input: &str) -> Result<String> {
+    solve(&parse_input(input)?)
+}
+
+fn solve(time_dist: &[(i64, i64)]) -> Result<String> {
     Ok(time_dist
         .iter()
         .map(|(t, d)| {
@@ -54,8 +43,9 @@ fn solve_one(time_dist: &[(i64, i64)]) -> Result<String> {
         .to_string())
 }
 
-fn solve_two(time_dist: &[(i64, i64)]) -> Result<String> {
-    let (t, d) = time_dist.iter().fold((0, 0), |mut out, part| {
+#[aoc(day6, part2)]
+fn solve_two(input: &str) -> Result<String> {
+    let (t, d) = parse_input(input)?.iter().fold((0, 0), |mut out, part| {
         let mut t = part.0;
         while t > 0 {
             out.0 *= 10;
@@ -70,5 +60,5 @@ fn solve_two(time_dist: &[(i64, i64)]) -> Result<String> {
         out.1 += part.1;
         out
     });
-    solve_one(&[(t, d)])
+    solve(&[(t, d)])
 }

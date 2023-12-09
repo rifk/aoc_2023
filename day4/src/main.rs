@@ -1,22 +1,6 @@
-use clap::Parser;
 use eyre::{eyre, Result};
 use std::collections::HashSet;
-
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(4)?;
-
-    let cards = parse_input(&input)?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&cards)?);
-    }
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&cards)?);
-    }
-
-    Ok(())
-}
+use utils::derive::aoc;
 
 fn parse_input(input: &str) -> Result<Vec<(HashSet<i64>, HashSet<i64>)>> {
     input
@@ -38,8 +22,9 @@ fn parse_input(input: &str) -> Result<Vec<(HashSet<i64>, HashSet<i64>)>> {
         .collect::<Result<Vec<(HashSet<i64>, HashSet<i64>)>>>()
 }
 
-fn solve_one(cards: &[(HashSet<i64>, HashSet<i64>)]) -> Result<String> {
-    Ok(cards
+#[aoc(day4, part1)]
+fn solve_one(input: &str) -> Result<String> {
+    Ok(parse_input(input)?
         .iter()
         .map(|c| {
             let win_count = c.0.intersection(&c.1).count() as u32;
@@ -53,7 +38,9 @@ fn solve_one(cards: &[(HashSet<i64>, HashSet<i64>)]) -> Result<String> {
         .to_string())
 }
 
-fn solve_two(cards: &[(HashSet<i64>, HashSet<i64>)]) -> Result<String> {
+#[aoc(day4, part2)]
+fn solve_two(input: &str) -> Result<String> {
+    let cards = parse_input(input)?;
     let wins = cards
         .iter()
         .map(|c| c.0.intersection(&c.1).count())

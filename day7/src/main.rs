@@ -1,20 +1,6 @@
-use clap::Parser;
 use eyre::{eyre, Result};
 use std::collections::HashMap;
-
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(7)?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&input)?);
-    }
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&input)?);
-    }
-
-    Ok(())
-}
+use utils::derive::aoc;
 
 #[derive(Clone, Debug, PartialEq, PartialOrd, Ord, Eq)]
 enum Hand {
@@ -170,10 +156,12 @@ fn get_total_winnings(mut hands: Vec<(Hand, (i64, i64, i64, i64, i64), i64)>) ->
         .to_string())
 }
 
+#[aoc(day7, part1)]
 fn solve_one(input: &str) -> Result<String> {
     get_total_winnings(parse_input(input, false)?)
 }
 
+#[aoc(day7, part2)]
 fn solve_two(input: &str) -> Result<String> {
     get_total_winnings(parse_input(input, true)?)
 }

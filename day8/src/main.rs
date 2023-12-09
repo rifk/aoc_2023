@@ -1,20 +1,6 @@
-use clap::Parser;
 use eyre::{eyre, Result};
 use std::collections::HashMap;
-
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(8)?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&input)?);
-    }
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&input)?);
-    }
-
-    Ok(())
-}
+use utils::derive::aoc;
 
 #[derive(Clone, Debug)]
 enum LeftRight {
@@ -49,7 +35,12 @@ fn parse_input(input: &str) -> Result<(Vec<LeftRight>, HashMap<&str, (&str, &str
     ))
 }
 
-fn num_of_steps(lr: &[LeftRight], map: &HashMap<&str, (&str, &str)>, start: &str, end: impl Fn(&str) -> bool) -> Result<usize> {
+fn num_of_steps(
+    lr: &[LeftRight],
+    map: &HashMap<&str, (&str, &str)>,
+    start: &str,
+    end: impl Fn(&str) -> bool,
+) -> Result<usize> {
     let mut cur: Result<&str> = Ok(start);
     let last = lr
         .iter()
@@ -85,11 +76,13 @@ fn num_of_steps(lr: &[LeftRight], map: &HashMap<&str, (&str, &str)>, start: &str
     Ok(last.0 + 2)
 }
 
+#[aoc(day8, part1)]
 fn solve_one(input: &str) -> Result<String> {
     let (lr, map) = parse_input(input)?;
     Ok(num_of_steps(&lr, &map, "AAA", |e| e == "ZZZ")?.to_string())
 }
 
+#[aoc(day8, part2)]
 fn solve_two(input: &str) -> Result<String> {
     let (lr, map) = parse_input(input)?;
     let steps = map

@@ -1,21 +1,5 @@
-use clap::Parser;
 use eyre::{bail, eyre, Result};
-
-fn main() -> Result<()> {
-    let args = utils::Args::parse();
-    let input = args.get_input(2)?;
-
-    let games = parse_input(&input)?;
-
-    if args.run_one() {
-        println!("part one:\n{}", solve_one(&games)?);
-    }
-    if args.run_two() {
-        println!("part two:\n{}", solve_two(&games)?);
-    }
-
-    Ok(())
-}
+use utils::derive::aoc;
 
 #[derive(Clone, Debug, Default)]
 struct Rgb {
@@ -49,8 +33,9 @@ fn parse_input(input: &str) -> Result<Vec<Vec<Rgb>>> {
         .collect::<Result<Vec<Vec<Rgb>>>>()
 }
 
-fn solve_one(games: &[Vec<Rgb>]) -> Result<String> {
-    Ok(games
+#[aoc(day2, part1)]
+fn solve_one(input: &str) -> Result<String> {
+    Ok(parse_input(input)?
         .iter()
         .enumerate()
         .filter(|(_, game)| {
@@ -63,8 +48,9 @@ fn solve_one(games: &[Vec<Rgb>]) -> Result<String> {
         .to_string())
 }
 
-fn solve_two(games: &[Vec<Rgb>]) -> Result<String> {
-    Ok(games
+#[aoc(day2, part2)]
+fn solve_two(input: &str) -> Result<String> {
+    Ok(parse_input(input)?
         .iter()
         .map(|game| {
             let mut min = Rgb::default();
