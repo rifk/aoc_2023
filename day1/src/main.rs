@@ -22,7 +22,7 @@ fn line_to_num(l: &str) -> Result<i64> {
     Ok(l.parse::<i64>()?)
 }
 
-#[aoc(day8, part2)]
+#[aoc(day1, part2)]
 pub fn solve_two(input: &str) -> Result<String> {
     solve_one(&replace(input))
 }
