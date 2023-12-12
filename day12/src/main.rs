@@ -1,4 +1,5 @@
 use eyre::{eyre, Result};
+use std::collections::HashMap;
 use utils::derive::aoc;
 
 fn parse_line(line: &str) -> Result<(Vec<Option<bool>>, Vec<u8>)> {
@@ -22,7 +23,12 @@ fn parse_line(line: &str) -> Result<(Vec<Option<bool>>, Vec<u8>)> {
     ))
 }
 
-fn num_arrangements(springs: &[Option<bool>], cons: &[u8], cur: u8, s: &str) -> u64 {
+fn num_arrangements(
+    springs: &[Option<bool>],
+    cons: &[u8],
+    cur: u8,
+    memo: &mut HashMap<(Vec<Option<bool>>, Vec<u8>, u8), u128>,
+) -> u128 {
     let sum = cons.iter().sum::<u8>();
     let gaps = if cons.is_empty() {
         0
@@ -34,7 +40,11 @@ fn num_arrangements(springs: &[Option<bool>], cons: &[u8], cur: u8, s: &str) -> 
         return 0;
     }
 
-    if cur != 0 {
+    if let Some(r) = memo.get(&(springs.to_vec(), cons.to_vec(), cur)) {
+        return *r;
+    }
+
+    let r = if cur != 0 {
         // have consecutive count, check if next sping fits requirements
         if cons[0] == cur {
             // end of consecutive count, require not damaged
@@ -49,7 +59,7 @@ fn num_arrangements(springs: &[Option<bool>], cons: &[u8], cur: u8, s: &str) -> 
                 }
             } else if !springs[0].unwrap_or(false) {
                 // next spring meets required not damaged
-                num_arrangements(&springs[1..], &cons[1..], 0, &(s.to_owned() + "."))
+                num_arrangements(&springs[1..], &cons[1..], 0, memo)
             } else {
                 // next spring fails requirement
                 0
@@ -60,7 +70,7 @@ fn num_arrangements(springs: &[Option<bool>], cons: &[u8], cur: u8, s: &str) -> 
                 0
             } else if springs[0].unwrap_or(true) {
                 // next spring meets requried damanged
-                num_arrangements(&springs[1..], cons, cur + 1, &(s.to_owned() + "#"))
+                num_arrangements(&springs[1..], cons, cur + 1, memo)
             } else {
                 // next spring fails requirement
                 0
@@ -80,34 +90,41 @@ fn num_arrangements(springs: &[Option<bool>], cons: &[u8], cur: u8, s: &str) -> 
             (false, true) => {
                 // still have springs, but must be not damanged
                 if !springs[0].unwrap_or(false) {
-                    num_arrangements(&springs[1..], cons, 0, &(s.to_owned() + "."))
+                    num_arrangements(&springs[1..], cons, 0, memo)
                 } else {
                     0
                 }
             }
             (false, false) => match springs[0] {
-                Some(true) => num_arrangements(&springs[1..], cons, 1, &(s.to_owned() + "#")),
-                Some(false) => num_arrangements(&springs[1..], cons, 0, &(s.to_owned() + ".")),
+                Some(true) => num_arrangements(&springs[1..], cons, 1, memo),
+                Some(false) => num_arrangements(&springs[1..], cons, 0, memo),
                 None => {
-                    num_arrangements(&springs[1..], cons, 0, &(s.to_owned() + "."))
-                        + num_arrangements(&springs[1..], cons, 1, &(s.to_owned() + "#"))
+                    num_arrangements(&springs[1..], cons, 0, memo)
+                        + num_arrangements(&springs[1..], cons, 1, memo)
                 }
             },
         }
-    }
+    };
+
+    memo.insert((springs.to_vec(), cons.to_vec(), cur), r);
+    r
 }
 
 #[aoc(day12, part1)]
 fn solve_one(input: &str) -> Result<String> {
+    let mut memo = HashMap::new();
     Ok(input
         .lines()
-        .map(|l| parse_line(l).map(|(springs, cons)| num_arrangements(&springs, &cons, 0, "")))
-        .sum::<Result<u64>>()?
+        .map(|l| {
+            parse_line(l).map(|(springs, cons)| num_arrangements(&springs, &cons, 0, &mut memo))
+        })
+        .sum::<Result<u128>>()?
         .to_string())
 }
 
 #[aoc(day12, part2)]
 fn solve_two(input: &str) -> Result<String> {
+    let mut memo = HashMap::new();
     Ok(input
         .lines()
         .map(|l| {
@@ -115,11 +132,12 @@ fn solve_two(input: &str) -> Result<String> {
                 let mut s = springs.clone();
                 for _ in 0..4 {
                     s.push(None);
-                    s.append(&mut s.clone());
+                    s.append(&mut springs.clone());
                 }
-                num_arrangements(&s, &cons.repeat(5), 0, "")
+                let cs = cons.repeat(5);
+                num_arrangements(&s, &cs, 0, &mut memo)
             })
         })
-        .sum::<Result<u64>>()?
+        .sum::<Result<u128>>()?
         .to_string())
 }
