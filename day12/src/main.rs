@@ -23,6 +23,7 @@ fn parse_line(line: &str) -> Result<(Vec<Option<bool>>, Vec<u8>)> {
     ))
 }
 
+#[allow(clippy::type_complexity)]
 fn num_arrangements(
     springs: &[Option<bool>],
     cons: &[u8],
