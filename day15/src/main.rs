@@ -21,7 +21,7 @@ fn solve_one(input: &str) -> Result<String> {
     Ok(input
         .replace('\n', "")
         .split(',')
-        .map(|s| hash(s))
+        .map(hash)
         .sum::<u64>()
         .to_string())
 }
