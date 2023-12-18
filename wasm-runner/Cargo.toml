@@ -18,6 +18,11 @@ day11 = { path = "../day11", default-features = false }
 day12 = { path = "../day12", default-features = false }
 day13 = { path = "../day13", default-features = false }
 day14 = { path = "../day14", default-features = false }
+day15 = { path = "../day15", default-features = false }
+day16 = { path = "../day16", default-features = false }
+day17 = { path = "../day17", default-features = false }
+day18 = { path = "../day18", default-features = false }
+day19 = { path = "../day19", default-features = false }
 eyre.workspace = true
 yew = { version = "0.21.0", features = ["csr"] }
 web-sys = "0.3.66"

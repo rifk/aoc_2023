@@ -5,4 +5,8 @@ edition.workspace = true
 
 [dependencies]
 eyre.workspace = true
-utils.workspace = true
+utils = { workspace = true, optional = true }
+
+[features]
+default = ["utils"]
+utils = ["dep:utils"]
