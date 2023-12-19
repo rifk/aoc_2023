@@ -41,6 +41,60 @@ fn light(
 ) {
     use Contraption::*;
     use Dir::*;
+    let mut splits = vec![];
+    let mut cur = Some((pos, dir));
+    while !splits.is_empty() || cur.is_some() {
+        if let Some((pos, dir)) = cur {
+            if entered[pos.0][pos.1].contains(&dir) {
+                cur = None;
+                continue;
+            }
+            entered[pos.0][pos.1].push(dir.clone());
+
+            let mut next_dirs = match &grid[pos.0][pos.1] {
+                Some(HSplit) => match &dir {
+                    Up | Down => vec![Left, Right],
+                    Left | Right => vec![dir],
+                },
+                Some(VSplit) => match &dir {
+                    Up | Down => vec![dir],
+                    Left | Right => vec![Up, Down],
+                },
+                Some(UpLeftMirror) => match &dir {
+                    Up => vec![Right],
+                    Down => vec![Left],
+                    Left => vec![Down],
+                    Right => vec![Up],
+                },
+                Some(UpRightMirror) => match &dir {
+                    Up => vec![Left],
+                    Down => vec![Right],
+                    Left => vec![Up],
+                    Right => vec![Down],
+                },
+                None => vec![dir],
+            };
+            cur = next_dirs.pop().and_then(|d| next_pos(grid, pos, &d).map(|p| (p,d)));
+            if let Some(d) = next_dirs.pop() {
+                if let Some(p) = next_pos(grid, pos, &d) {
+                    splits.push((p,d));
+                }
+            }
+        } else {
+            cur = splits.pop();
+        }
+    }
+}
+
+#[allow(dead_code)]
+fn light_recursive(
+    grid: &[Vec<Option<Contraption>>],
+    entered: &mut [Vec<Vec<Dir>>],
+    pos: (usize, usize),
+    dir: Dir,
+) {
+    use Contraption::*;
+    use Dir::*;
     if entered[pos.0][pos.1].contains(&dir) {
         return;
     }
