@@ -8,9 +8,30 @@
 
         <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
 
-        <link data-trunk rel="rust" href="Cargo.toml" data-bin="app" data-type="main" data-weak-refs />
-        <link data-trunk rel="rust" href="Cargo.toml" data-bin="worker1" data-type="worker" data-weak-refs />
-        <link data-trunk rel="rust" href="Cargo.toml" data-bin="worker2" data-type="worker" data-weak-refs />
+        <link
+            data-trunk
+            rel="rust"
+            href="Cargo.toml"
+            data-bin="app"
+            data-type="main"
+            data-wasm-opt="4"
+            data-weak-refs />
+        <link
+            data-trunk
+            rel="rust"
+            href="Cargo.toml"
+            data-bin="worker1"
+            data-type="worker"
+            data-wasm-opt="4"
+            data-weak-refs />
+        <link
+            data-trunk
+            rel="rust"
+            href="Cargo.toml"
+            data-bin="worker2"
+            data-type="worker"
+            data-wasm-opt="4"
+            data-weak-refs />
     </head>
     <body></body>
 </html>

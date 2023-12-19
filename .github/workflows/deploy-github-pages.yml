@@ -1,12 +1,6 @@
 name: Deploy GitHub Pages
 
-on:
-  workflow_dispatch:
-    inputs:
-      dummy:
-        description: 'dummy'
-        required: false
-        type: boolean
+on: workflow_dispatch
 
 permissions:
   contents: read
@@ -32,16 +26,17 @@ jobs:
             ~/.cargo/git
             ~/.cargo/registry
             target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+            wasm-runner/dist
 
       - name: Install dependencies
         run: |
-          cargo install --locked trunk wasm-bindgen-cli || true \
+          cargo install --locked trunk || true \
           && rustup target add wasm32-unknown-unknown
 
       - name: Build the Rust WASM app and all of its assets
         run: |
           trunk build \
+            --release \
             --public-url ${{ github.event.repository.name }} \
             -- \
             ./wasm-runner/index.html
