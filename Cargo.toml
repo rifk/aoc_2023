@@ -22,6 +22,7 @@ members = [
     "day17",
     "day18",
     "day19",
+    "day20",
 ]
 resolver = "2"
 
@@ -31,4 +32,5 @@ edition = "2021"
 
 [workspace.dependencies]
 eyre = "0.6.9"
+num-integer = "0.1.45"
 utils = { path = "utils" }
