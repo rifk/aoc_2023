@@ -74,10 +74,12 @@ fn light(
                 },
                 None => vec![dir],
             };
-            cur = next_dirs.pop().and_then(|d| next_pos(grid, pos, &d).map(|p| (p,d)));
+            cur = next_dirs
+                .pop()
+                .and_then(|d| next_pos(grid, pos, &d).map(|p| (p, d)));
             if let Some(d) = next_dirs.pop() {
                 if let Some(p) = next_pos(grid, pos, &d) {
-                    splits.push((p,d));
+                    splits.push((p, d));
                 }
             }
         } else {
