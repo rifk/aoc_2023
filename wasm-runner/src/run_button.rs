@@ -8,8 +8,8 @@ pub struct RunButtonProps {
     pub day: u8,
     pub input: String,
     pub run_callback: Callback<()>,
-    pub solve_one_callback: Callback<Result<String, String>>,
-    pub solve_two_callback: Callback<Result<String, String>>,
+    pub solve_one_callback: Callback<Result<(String, i64), String>>,
+    pub solve_two_callback: Callback<Result<(String, i64), String>>,
 }
 
 #[function_component(RunButton)]

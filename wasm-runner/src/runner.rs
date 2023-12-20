@@ -8,14 +8,14 @@ use yew_agent::oneshot::OneshotProvider;
 enum Output {
     Calculating(usize),
     Error(String),
-    Solution(String),
+    Solution(String, i64),
 }
 impl Output {
     fn to_html(&self) -> Html {
         match self {
             Self::Calculating(count) => html! {<>{"calculating"}{vec!['.'; *count]}</>},
             Self::Error(err) => html! {<>{"ERROR - "}{err}</>},
-            Self::Solution(sol) => html! {{sol}},
+            Self::Solution(sol, ms) => html! {<>{sol}<br/>{ms}{"ms"}</>},
         }
     }
 }
@@ -25,9 +25,9 @@ pub enum Msg {
     InputUpdate(String),
     Run,
     Tick,
-    OkOne(String),
+    OkOne(String, i64),
     ErrOne(String),
-    OkTwo(String),
+    OkTwo(String, i64),
     ErrTwo(String),
 }
 
@@ -64,15 +64,21 @@ impl Component for Runner {
 
         let solve_one_callback = {
             let link = ctx.link().clone();
-            Callback::from(move |res: Result<String, String>| {
-                link.send_message(res.map(Msg::OkOne).unwrap_or_else(Msg::ErrOne));
+            Callback::from(move |res: Result<(String, i64), String>| {
+                link.send_message(
+                    res.map(|(s, t)| Msg::OkOne(s, t))
+                        .unwrap_or_else(Msg::ErrOne),
+                );
             })
         };
 
         let solve_two_callback = {
             let link = ctx.link().clone();
-            Callback::from(move |res: Result<String, String>| {
-                link.send_message(res.map(Msg::OkTwo).unwrap_or_else(Msg::ErrTwo));
+            Callback::from(move |res: Result<(String, i64), String>| {
+                link.send_message(
+                    res.map(|(s, t)| Msg::OkTwo(s, t))
+                        .unwrap_or_else(Msg::ErrTwo),
+                );
             })
         };
 
@@ -146,9 +152,9 @@ impl Component for Runner {
 
                 updated
             }
-            Msg::OkOne(sol) => {
+            Msg::OkOne(sol, ms) => {
                 if let Some((o1, _)) = self.output.as_mut() {
-                    *o1 = Output::Solution(sol);
+                    *o1 = Output::Solution(sol, ms);
                     true
                 } else {
                     false
@@ -162,9 +168,9 @@ impl Component for Runner {
                     false
                 }
             }
-            Msg::OkTwo(sol) => {
+            Msg::OkTwo(sol, ms) => {
                 if let Some((_, o2)) = self.output.as_mut() {
-                    *o2 = Output::Solution(sol);
+                    *o2 = Output::Solution(sol, ms);
                     true
                 } else {
                     false
