@@ -27,6 +27,7 @@ jobs:
             ~/.cargo/registry
             target
             wasm-runner/dist
+          key: ${{ runner.os }}-cargo
 
       - name: Install dependencies
         run: |
