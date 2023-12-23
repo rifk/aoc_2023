@@ -46,5 +46,6 @@ pub fn day_solvers() -> Vec<Day> {
         day!(20),
         day!(21),
         day!(22),
+        day!(23),
     ]
 }
