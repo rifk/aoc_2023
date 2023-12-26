@@ -1,0 +1,13 @@
+[package]
+name = "day24"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+eyre.workspace = true
+num-integer.workspace=true
+utils = { workspace = true, optional = true }
+
+[features]
+default = ["utils"]
+utils = ["dep:utils"]
