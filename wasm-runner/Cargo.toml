@@ -28,6 +28,7 @@ day21 = { path = "../day21", default-features = false }
 day22 = { path = "../day22", default-features = false }
 day23 = { path = "../day23", default-features = false }
 day24 = { path = "../day24", default-features = false }
+day25 = { path = "../day25", default-features = false }
 eyre.workspace = true
 yew = { version = "0.21.0", features = ["csr"] }
 web-sys = "0.3.66"
